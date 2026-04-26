@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Progress - Self Track 26</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 Self Track 26</h1>
+    </div>
+
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/create-track">Start Tracking</a>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <h2>{{ session.name }}</h2>
+            <p>Tracking Progress: {{ session.days }} days | Created: {{ session.created_date }}</p>
+
+            <div class="tracking-section">
+                <h3>Daily Notes & Progress</h3>
+                
+                <form method="POST" action="/save-note" class="form">
+                    <input type="hidden" name="session_id" value="{{ session.id }}">
+                    
+                    <div class="form-group">
+                        <label for="day">Select Day:</label>
+                        <select id="day" name="day" required>
+                            {% for i in range(1, session.days + 1) %}
+                                <option value="day_{{ i }}">Day {{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Your Notes:</label>
+                        <textarea id="notes" name="notes" rows="5" placeholder="Write your progress, reflections, and notes here..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Save Notes</button>
+                </form>
+            </div>
+
+            <div class="progress-display">
+                <h3>Your Progress</h3>
+                <div class="days-grid">
+                    {% for i in range(1, session.days + 1) %}
+                        <div class="day-box">
+                            <p>Day {{ i }}</p>
+                            {% if ('day_' ~ i) in session.daily_notes %}
+                                <span class="completed">✓</span>
+                            {% else %}
+                                <span class="pending">○</span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <p><a href="/">Back to Home</a></p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 Self Track 26 App. Keep tracking, keep growing!</p>
+    </div>
+</body>
+</html>
